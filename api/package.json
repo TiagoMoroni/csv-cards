@@ -19,7 +19,8 @@
     "faker": "^4.1.0",
     "jsonwebtoken": "^8.5.0",
     "pg": "^8.11.1",
-    "sequelize": "^4.42.0"
+    "sequelize": "^4.42.0",
+    "sequelize-mock": "^0.10.2"
   },
   "devDependencies": {
     "jest": "^24.1.0",

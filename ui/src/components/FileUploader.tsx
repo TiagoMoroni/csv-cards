@@ -9,7 +9,10 @@ function FileUploader({ onUpload }) {
     reader.onload = async (e) => {
       const content = e.target?.result;
       const rows = content?.split('\n');
-      const data = rows.map((row) => row.split(','));
+      const data = rows.map((row) => {
+        const [name, city, country, favoriteSport] = row.split(',');
+        return { name, city, country, favoriteSport };
+      });
 
       onUpload({ data, loading: true }); // Emit an event with the data and loading state
 

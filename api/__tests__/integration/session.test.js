@@ -1,82 +1,138 @@
-const request = require("supertest");
+const { User } = require("../../src/app/models");
+const UserController = require("../../src/app/controllers/UserController");
 
-const app = require("../../src/app");
-const truncate = require("../utils/truncate");
-const factory = require("../factories");
+jest.mock("../../src/app/models", () => {
+  const SequelizeMock = require("sequelize-mock");
+  const dbMock = new SequelizeMock();
+  return {
+    User: dbMock.define("User", {
+      name: "John",
+      city: "New York",
+      country: "USA",
+      favorite_sport: "Basketball",
+    }),
+  };
+});
 
-describe("Authentication", () => {
-  beforeEach(async () => {
-    await truncate();
+describe("UserController", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it("should authenticate with valid credentials", async () => {
-    const user = await factory.create("User", {
-      password: "123123"
+  describe("store", () => {
+    test("should store users from CSV data and return status 200", async () => {
+      const req = {
+        body: {
+          content: "base64-encoded CSV data",
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+        sendStatus: jest.fn(),
+      };
+
+      await UserController.store(req, res);
+
+      expect(User.destroy).toHaveBeenCalled();
+      expect(User.bulkCreate).toHaveBeenCalled();
+      expect(res.sendStatus).toHaveBeenCalledWith(200);
     });
 
-    const response = await request(app)
-      .post("/sessions")
-      .send({
-        email: user.email,
-        password: "123123"
+    test("should return status 400 if no base64-encoded CSV file is provided", async () => {
+      const req = {
+        body: {
+          content: null,
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+
+      await UserController.store(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        error: "No base64-encoded CSV file provided",
       });
-
-    expect(response.status).toBe(200);
-  });
-
-  it("should not authenticate with invalid credentials", async () => {
-    const user = await factory.create("User", {
-      password: "123123"
     });
 
-    const response = await request(app)
-      .post("/sessions")
-      .send({
-        email: user.email,
-        password: "123456"
+    test("should return status 500 if an error occurs during user creation", async () => {
+      const req = {
+        body: {
+          content: "base64-encoded CSV data",
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      User.bulkCreate.mockRejectedValueOnce(new Error("Database error"));
+
+      await UserController.store(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ error: expect.any(Error) });
+    });
+  });
+
+  describe("search", () => {
+    test("should search for users by name and return matching users", async () => {
+      const req = {
+        query: {
+          q: "John",
+        },
+      };
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      };
+
+      User.findAll.mockResolvedValueOnce([
+        {
+          name: "John",
+          city: "New York",
+          country: "USA",
+          favorite_sport: "Basketball",
+        },
+      ]);
+
+      await UserController.search(req, res);
+
+      expect(User.findAll).toHaveBeenCalledWith({
+        where: {
+          name: {
+            [User.Op.iLike]: "%John%",
+          },
+        },
       });
-
-    expect(response.status).toBe(401);
-  });
-
-  it("should return jwt token when authenticated", async () => {
-    const user = await factory.create("User", {
-      password: "123123"
+      expect(res.json).toHaveBeenCalledWith([
+        {
+          name: "John",
+          city: "New York",
+          country: "USA",
+          favorite_sport: "Basketball",
+        },
+      ]);
     });
 
-    const response = await request(app)
-      .post("/sessions")
-      .send({
-        email: user.email,
-        password: "123123"
-      });
+    test("should return status 500 if an error occurs during search", async () => {
+      const req = {
+        query: {
+          q: "John",
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      User.findAll.mockRejectedValueOnce(new Error("Database error"));
 
-    expect(response.body).toHaveProperty("token");
-  });
+      await UserController.search(req, res);
 
-  it("should be able to access private routes when authenticated", async () => {
-    const user = await factory.create("User", {
-      password: "123123"
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ error: expect.any(Error) });
     });
-
-    const response = await request(app)
-      .get("/dashboard")
-      .set("Authorization", `Bearer ${user.generateToken()}`);
-
-    expect(response.status).toBe(200);
-  });
-
-  it("should not be able to access private routes without jwt token", async () => {
-    const response = await request(app).get("/dashboard");
-
-    expect(response.status).toBe(401);
-  });
-
-  it("should not be able to access private routes with invalid jwt token", async () => {
-    const response = await request(app)
-      .get("/dashboard")
-      .set("Authorization", `Bearer 123123`);
-
-    expect(response.status).toBe(401);
   });
 });
