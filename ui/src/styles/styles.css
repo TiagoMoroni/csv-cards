@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #7e7777;
+}
+
+.main-container {
+  max-width: 95vw;
+  margin: 20px 20px;
+  border-radius: 20px;
+  padding: 20px;
+  background: white;
+}
+
+.header-container{
+  display: flex;
+}
+
+.csv-logo{
+  width: 50px;
+  height: auto;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333333;
+  text-align: center;
+}
+
+.card {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+  /* display: flex; */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card p {
+  margin: 0px;
+  word-break: break-all;
+}
+
+.icon-text-card {
+  flex-grow: 1;
+  display: flex;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.icon-text-card p {
+  padding-left: 10px;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.error-message {
+  background-color: #ffcccc;
+  color: #ff0000;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
+
+.file-uploader {
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  margin-bottom: 20px;
+}
+
+.card-content {
+  text-align: center;
+}
+
+.card-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333333;
+}
+
+.card-details {
+  color: #666666;
+}
