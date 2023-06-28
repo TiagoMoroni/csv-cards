@@ -30,6 +30,7 @@ class UserController {
     }
 
     try {
+      // exclude all previous data to lode new date
       await User.destroy({ where: {} })
       await User.bulkCreate(users)
       res.sendStatus(200);

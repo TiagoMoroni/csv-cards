@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Card from './components/Card';
 import './styles/styles.css';
-import './styles/loading.css';
 import axios from 'axios';
 import FileUploader from './components/FileUploader';
 import SearchBar from './components/SearchBar';
+import Loading from './components/Loading';
 
 interface User {
   name: string;
@@ -66,7 +66,7 @@ function App() {
     <div className="App">
       {loading &&
         <>
-          <div className="loading"><div className="lds-ring"><div></div><div></div><div></div><div></div></div></div>
+          <Loading></Loading>
         </>
       }
       <div className={`error-message ${errorMessage ? '' : 'hidden'}`}>

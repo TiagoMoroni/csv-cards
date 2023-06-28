@@ -2,6 +2,8 @@ require("dotenv").config({
   path: process.env.NODE_ENV === "test" ? ".env.test" : ".env"
 });
 
+var bodyParser = require('body-parser');
+
 const express = require("express");
 const cors = require("cors");
 
@@ -10,6 +12,9 @@ class AppController {
     this.express = express();
     this.express.use(express.json());
     this.express.use(cors());
+
+    this.express.use(bodyParser.json({ limit: '50mb', extended: true }))
+    this.express.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
     this.routes();
   }
