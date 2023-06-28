@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/styles.css';
-import { FaUser, FaBuilding, FaGlobe, FaFutbol } from 'react-icons/fa';
+import { FaBuilding, FaGlobe, FaFutbol } from 'react-icons/fa';
 
 interface User {
   name: string;
@@ -14,29 +14,28 @@ function Card({ data }: { data: User }) {
 
   return (
     <div className="card">
-      <div className='icon-text-card'>
-        <div className="icon">
-          <FaUser />
-        </div>
+      <div className='card-title'>
         <p className="card-text">{name}</p>
       </div>
-      <div className='icon-text-card'>
-        <div className="icon">
-          <FaBuilding />
+      <div className="card-content">
+        <div className='icon-text-card'>
+          <div className="icon">
+            <FaBuilding />
+          </div>
+          <p className="card-text">{city}</p>
         </div>
-        <p className="card-text">{city}</p>
-      </div>
-      <div className='icon-text-card'>
-        <div className="icon">
-          <FaGlobe />
+        <div className='icon-text-card'>
+          <div className="icon">
+            <FaGlobe />
+          </div>
+          <p className="card-text">{country}</p>
         </div>
-        <p className="card-text">{country}</p>
-      </div>
-      <div className='icon-text-card'>
-        <div className="icon">
-          <FaFutbol />
+        <div className='icon-text-card'>
+          <div className="icon">
+            <FaFutbol />
+          </div>
+          <p className="card-text">{favoriteSport}</p>
         </div>
-        <p className="card-text">{favoriteSport}</p>
       </div>
     </div>
   );

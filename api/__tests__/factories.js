@@ -4,8 +4,9 @@ const { User } = require("../src/app/models");
 
 factory.define("User", User, {
   name: faker.name.findName(),
-  email: faker.internet.email(),
-  password: faker.internet.password()
+  city: faker.address.city(10),
+  country: faker.address.country(),
+  favorite_sport: faker.lorem.word()
 });
 
 module.exports = factory;

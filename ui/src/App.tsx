@@ -5,7 +5,6 @@ import './styles/loading.css';
 import axios from 'axios';
 import FileUploader from './components/FileUploader';
 import SearchBar from './components/SearchBar';
-import csvLogo from './assets/csv-logo.png';
 
 interface User {
   name: string;
@@ -22,21 +21,20 @@ interface SearchResponse {
 }
 
 function App() {
-  // const [csvData, setCSVData] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleCSVUpload = (data: any) => {
     setLoading(data.loading);
+    handleSearch("")
   };
 
   const sendErrorMessage = (error: string) => {
-    console.log(error)
     setErrorMessage(error)
     setTimeout(() =>
       setErrorMessage(null)
-      , 2000)
+      , 5000)
   }
 
   const handleSearch = (searchTerm: string) => {
@@ -71,17 +69,16 @@ function App() {
           <div className="loading"><div className="lds-ring"><div></div><div></div><div></div><div></div></div></div>
         </>
       }
-      {errorMessage && (
-        <div className="error-message">
-          {errorMessage}
-        </div>
-      )}
+      <div className={`error-message ${errorMessage ? '' : 'hidden'}`}>
+        {errorMessage}
+      </div>
       <div className='main-container'>
         <header className='header-container'>
-          <img src={csvLogo} alt="CSV Logo" className="csv-logo" />
-          <div className='title'>CSV Cards</div>
-          <FileUploader onUpload={handleCSVUpload} />
-          <SearchBar onSearch={handleSearch} />
+          <div className='title'>CSV Loader 📁</div>
+          <div className="header-second-lane">
+            <SearchBar onSearch={handleSearch} />
+            <FileUploader onUpload={handleCSVUpload} onError={sendErrorMessage} />
+          </div>
         </header>
         <div className="card-container">
           {filteredData.length > 0 ? (
@@ -89,8 +86,8 @@ function App() {
               <Card key={index} data={rowData} />
             ))
           ) : (
-            <div>
-              No data found
+            <div className='no-data-div'>
+              No data found or no file loaded ❌
             </div>
           )}
         </div>

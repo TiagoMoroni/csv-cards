@@ -1,8 +1,8 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #ebebeb;
+  font-family: 'Poppins', sans-serif;
+  background-color: white;
 }
 
 .main-container {
@@ -10,34 +10,42 @@ body {
   margin: 20px 20px;
   border-radius: 20px;
   padding: 20px;
-  background: white;
+  background: #e8ebf3;
 }
 
-.header-container{
+.header-container {
+  display: block;
+}
+
+.header-second-lane {
+  padding-top: 20px;
+  padding-bottom: 20px;
   display: flex;
-}
-
-.csv-logo{
-  max-width:100px;
-  max-height:auto;
-  width: auto;
-  height: auto;
+  flex-wrap: wrap;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bold;
   margin-bottom: 20px;
+  text-transform: uppercase;
   color: #00accc;
-  text-align: center;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, max-content));
+  grid-gap: 26px;
+  justify-content: center;
+  padding: initial;
 }
 
 .card {
   background-color: #ffffff;
-  padding: 20px;
-  margin-bottom: 20px;
-  /* display: flex; */
-  border-radius: 8px;
+  padding: 14px;
+  max-width: 260px;
+  min-width: 200px;
+  border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -47,60 +55,86 @@ body {
   color: black;
 }
 
+.card-title {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.card-content {
+  margin-top: 10px;
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+}
+
 .card .icon {
   color: #00accc;
+  display: flex;
+  place-items: center;
+  font-size: 24px;
 }
 
 .icon-text-card {
   flex-grow: 1;
   display: flex;
-  margin-bottom: 10px;
-  margin-top: 10px;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  margin-left: 10px;
 }
 
 .icon-text-card p {
   padding-left: 10px;
+  font-size: 16px;
 }
 
-.card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+.file-input {
+  display: none;
+}
+
+.file-input-label {
+  background-color: rgb(21, 20, 20);
+  cursor: pointer;
+  display: flex;
+  place-content: center;
+  border-radius: 12px;
+}
+
+.file-input-label label {
+  cursor: pointer;
+  color: white;
+  font-size: 20px;
+  min-width: 320px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .error-message {
   background-color: #ffcccc;
   color: #ff0000;
-  padding: 10px;
-  margin-bottom: 20px;
+  padding: 30px;
   border-radius: 8px;
+  font-size: 16px;
   text-align: center;
   font-weight: bold;
+  position: fixed;
+  bottom: 20px;
+  right: 25px;
+  opacity: 1;
+  transition: 0.5s ease-in-out;
 }
 
-.hidden {
-  display: none;
+.no-data-div {
+  font-size: 20px;
+  font-weight: 700;
 }
 
-.file-uploader {
-  margin-bottom: 20px;
-}
-
-.search-bar {
-  margin-bottom: 20px;
+.error-message.hidden {
+  transition: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .card-content {
   text-align: center;
-}
-
-.card-name {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #333333;
-}
-
-.card-details {
-  color: #666666;
 }
